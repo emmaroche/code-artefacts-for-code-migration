@@ -1,12 +1,11 @@
 package models;
 
 import org.junit.jupiter.api.AfterEach;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class ProductTest {
 
@@ -19,7 +18,7 @@ class ProductTest {
         //name, 20 chars, code 1000, unitCost 999, inCurrentProductLine true.
         productExact = new Product("Television 50 Inches", 1000, 999, true);
         //name, 21 chars, code 10000, unitCost 1000, inCurrentProductLine false.
-        productAbove = new Product("Television 60 Inches", 10000, 1000, false);
+        productAbove = new Product("Television 60 Inches.", 10000, 1000, false);
         //name, 0 chars, code 9999, unitCost 0, inCurrentProductLine false.
         productZero = new Product("", 9999, 0, false);
     }
@@ -50,24 +49,23 @@ class ProductTest {
 
         @Test
         void getProductCode() {
-            assertEquals(999, productBelow.getProductCode());
+            assertEquals(-1, productBelow.getProductCode());
             assertEquals(1000, productExact.getProductCode());
-            assertEquals(10000, productAbove.getProductCode());
+            assertEquals(-1, productAbove.getProductCode());
             assertEquals(9999, productZero.getProductCode());
         }
 
         @Test
         void isInCurrentProductLine() {
-            assertTrue(productBelow.getInCurrentProductLine());
-            assertTrue(productExact.getInCurrentProductLine());
-            assertFalse(productAbove.getInCurrentProductLine());
-            assertFalse(productZero.getInCurrentProductLine());
+            assertTrue(productBelow.isInCurrentProductLine());
+            assertTrue(productExact.isInCurrentProductLine());
+            assertFalse(productAbove.isInCurrentProductLine());
+            assertFalse(productZero.isInCurrentProductLine());
         }
     }
 
     @Nested
     class Setters {
-
         @Test
         void setProductName() {
             assertEquals("Television 42Inches", productBelow.getProductName());
@@ -91,10 +89,10 @@ class ProductTest {
 
         @Test
         void setProductCode() {
-            assertEquals(10000, productAbove.getProductCode());
+            assertEquals(-1, productAbove.getProductCode());
 
             productAbove.setProductCode(999);  //update ignored
-            assertEquals(10000, productAbove.getProductCode());
+            assertEquals(-1, productAbove.getProductCode());
 
             productAbove.setProductCode(1000); //update performed
             assertEquals(1000, productAbove.getProductCode());
@@ -108,14 +106,15 @@ class ProductTest {
 
         @Test
         void setInCurrentProductLine() {
-            assertTrue(productExact.getInCurrentProductLine());
+            assertTrue(productExact.isInCurrentProductLine());
             productExact.setInCurrentProductLine(false); //no validation performed
-            assertFalse(productExact.getInCurrentProductLine());
+            assertFalse(productExact.isInCurrentProductLine());
 
-            assertFalse(productAbove.getInCurrentProductLine());
+            assertFalse(productAbove.isInCurrentProductLine());
             productAbove.setInCurrentProductLine(true); //no validation performed
-            assertTrue(productAbove.getInCurrentProductLine());
+            assertTrue(productAbove.isInCurrentProductLine());
         }
+
     }
 
     @Test
